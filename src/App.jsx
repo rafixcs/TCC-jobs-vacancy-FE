@@ -15,7 +15,7 @@ function App() {
   return (
     <Router>
       <Header />
-      <main className="container mx-auto p-4 mt-20 mb-20 bg-gray-300">
+      <main className="container mx-auto p-4 mt-20 mb-20 bg-gray-300 border border-gray-300 rounded-lg">
         {<SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} buttonHandler={inputButton} />}
         <section>
           <article className="container bg-gray-500 mt-4">
