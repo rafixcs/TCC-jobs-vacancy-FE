@@ -1,5 +1,3 @@
-import "../../output.css"
-
 const Footer = () => {
   return (
     <>

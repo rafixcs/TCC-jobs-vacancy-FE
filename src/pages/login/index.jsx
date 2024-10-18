@@ -1,6 +1,3 @@
-//import { useNavigate } from "react-router-dom";
-import Input from "../../components/input";
-import Button from "../../components/button";
 import { useState } from "react";
 
 function isValidEmail(email) {
@@ -14,7 +11,9 @@ export default function Login() {
   const [errorMessage, setErrorMessage] = useState("");
   //const navigate = useNavigate();
 
-  async function handleSubmit() {
+  async function handleSubmit(e) {
+    e.preventDefault()
+
     if (email === "" || password === "") {
       setErrorMessage("Por favor, preencha todos os campos.");
       return;
@@ -26,38 +25,57 @@ export default function Login() {
     }
 
     setErrorMessage("");
+
+    alert("submit email:" + email + " pass:" + password)
   }
 
-  const isButtonDisabled = !isValidEmail(email) || password === "";
-
   return (
-    <main className="flex items-center justify-center h-screen bg-gray-100">
-      <form
-        onSubmit={(e) => e.preventDefault()}
-        className="bg-white p-8 shadow-md w-full max-w-sm"
-      >
-        <h3 className="text-2xl font-bold mb-4 text-center">Login</h3>
-        {errorMessage && (
-          <div className="mb-4 text-red-500">{errorMessage}</div>
-        )}
-        <Input
-          label="Email"
-          type="email"
-          onChange={(e) => setEmail(e.target.value)}
-          value={email}
-        />
-        <Input
-          label="Senha"
-          type="password"
-          onChange={(e) => setPassword(e.target.value)}
-          value={password}
-        />
-        <Button
-          text="Entrar"
-          onClick={handleSubmit}
-          disabled={isButtonDisabled}
-        />
-      </form>
-    </main>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="px-8 py-6 mt-4 text-left bg-white shadow-lg rounded-lg">
+        <h3 className="text-2xl font-bold text-center">Login to your account</h3>
+        <form>
+          <div className="mt-4">
+            <div>
+              <label className="block" htmlFor="email">
+                Email
+              </label>
+              <input
+                type="email"
+                placeholder="Email"
+                id="email"
+                className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+            <div className="mt-4">
+              <label className="block" htmlFor="password">
+                Password
+              </label>
+              <input
+                type="password"
+                placeholder="Password"
+                id="password"
+                className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+            <div className="flex items-baseline justify-between">
+              <button
+                type="submit"
+                className="px-6 py-2 mt-4 text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+                onClick={(e) => handleSubmit(e)}
+              >
+                Login
+              </button>
+              <a href="#" className="text-sm text-blue-600 hover:underline">
+                Forgot password?
+              </a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
   );
 }
