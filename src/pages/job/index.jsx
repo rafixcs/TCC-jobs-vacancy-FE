@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import Header from "../../components/header";
 
 const sampleJob = {
@@ -23,6 +24,11 @@ const sampleJob = {
 export default function Job({ job }) {
 
   job = sampleJob
+  const navigate = useNavigate()
+
+  function handleApply() {
+    navigate("/jobs/123/apply")
+  }
 
   return (
     <>
@@ -65,7 +71,10 @@ export default function Job({ job }) {
           </div>
         </div>
 
-        <button className="mt-4 px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+        <button 
+          className="mt-4 px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          onClick={() => handleApply()}
+        >
           Apply Now
         </button>
       </div>
