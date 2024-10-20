@@ -32,11 +32,6 @@ const Header = () => {
             </Link>
           </li>
           <li>
-            <Link to="/contact" className="text-gray-700 hover:text-blue-500">
-              Contact
-            </Link>
-          </li>
-          <li>
             <Link to="/signup" className="text-gray-700 hover:text-blue-500">
               Login
             </Link>

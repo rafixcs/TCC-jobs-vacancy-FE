@@ -12,8 +12,8 @@ export default function JobsList() {
 
   const navigate = useNavigate()
 
-  function handleJob(jobCard) {
-    navigate("/jobs/123")
+  function handleJob(job) {
+    navigate(`/jobs/${job.id}`)
   }
 
 
