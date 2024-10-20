@@ -2,13 +2,15 @@ import Header from "../../components/header"
 import SearchBar from "../../components/searchbar"
 import Footer from "../../components/footer"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 function Home() {
 
   const [searchTerm, setSearchTerm] = useState('')
+  const navigate = useNavigate()
 
   let inputButton = () => {
-    alert(searchTerm)
+    navigate("/jobslist")
   }
 
 

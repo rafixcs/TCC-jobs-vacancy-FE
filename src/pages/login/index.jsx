@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { apiHandler } from "../../utils/apihandler";
+import { useNavigate } from "react-router-dom";
 
 function isValidEmail(email) {
   const emailFormat = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -9,24 +11,45 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
 
   async function handleSubmit(e) {
     e.preventDefault()
 
     if (email === "" || password === "") {
-      setErrorMessage("Por favor, preencha todos os campos.");
+      setErrorMessage("Please, fill all fields.");
       return;
     }
 
     if (!isValidEmail(email)) {
-      setErrorMessage("Por favor, insira um email válido.");
+      setErrorMessage("Please, insert a valid email.");
       return;
     }
 
     setErrorMessage("");
 
-    alert("submit email:" + email + " pass:" + password)
+    try {
+      apiHandler(
+        "auth",
+        "POST",
+        "application/json",
+        {
+          username: email,
+          password: password,
+        }
+      ).then((response) => {
+        if (response.ok) {
+          response.json().then((data) => {
+            sessionStorage.setItem("token", data.token);
+            navigate("/")
+          })
+        } else {
+          setErrorMessage("Email or password invalid")
+        }
+      })
+    } catch (error) {
+      setErrorMessage("Email or password invalid")
+    }
   }
 
   return (
@@ -70,9 +93,12 @@ export default function Login() {
                 Login
               </button>
               <a href="#" className="text-sm text-blue-600 hover:underline">
-                Forgot password?
+                Create Account
               </a>
             </div>
+            {errorMessage && (
+              <div className="mb-1 mt-4 text-red-500">{errorMessage}</div>
+            )}
           </div>
         </form>
       </div>
