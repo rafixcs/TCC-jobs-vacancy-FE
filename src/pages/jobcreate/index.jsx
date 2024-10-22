@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Header from '../../components/header';
+import { apiHandler } from '../../utils/apihandler';
 
 function CreateJobPage() {
   const [formData, setFormData] = useState({
@@ -103,15 +104,12 @@ function CreateJobPage() {
     }
 
     try {
-      // Replace with your API endpoint
-      const response = await fetch('https://api.example.com/jobs', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          // Include authorization headers if needed
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await apiHandler(
+        "job",
+        "POST",
+        "application/json",
+        formData
+      )
 
       if (response.ok) {
         setSubmitStatus({ submitting: false, success: true, error: null });

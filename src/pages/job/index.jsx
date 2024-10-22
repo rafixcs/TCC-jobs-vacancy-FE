@@ -33,7 +33,7 @@ export default function JobDetails() {
 
 
   function handleApply() {
-    navigate(`/jobs/${jobId}/apply`)
+    navigate(`/jobs/${jobId}/apply?title=${job.title}&company=${job.company}`)
   }
 
   useEffect(() => {
@@ -52,7 +52,8 @@ export default function JobDetails() {
         setLoading(false)
       }
     }).catch((reason) => {
-
+      setError("Job vacancy may not exist")
+      console.error(reason)
     })
 
   }, [])
@@ -111,23 +112,27 @@ export default function JobDetails() {
           <p className="text-gray-700">{job.description}</p>
         </div>
 
-        <div className="mb-6">
-          <h2 className="text-2xl font-semibold mb-2">Responsibilities</h2>
-          <ul className="list-disc list-inside text-gray-700">
-            {job.responsibilities.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
-        </div>
+        {job.responsibilities && (
+          <div className="mb-6">
+            <h2 className="text-2xl font-semibold mb-2">Responsibilities</h2>
+            <ul className="list-disc list-inside text-gray-700">
+              {job.responsibilities.map((item, index) => (
+                <li key={index}>{item}</li>
+              ))}
+            </ul>
+          </div>
+        )}
 
-        <div className="mb-6">
-          <h2 className="text-2xl font-semibold mb-2">Requirements</h2>
-          <ul className="list-disc list-inside text-gray-700">
-            {job.requirements.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
-        </div>
+        {job.requirements && (
+          <div className="mb-6">
+            <h2 className="text-2xl font-semibold mb-2">Requirements</h2>
+            <ul className="list-disc list-inside text-gray-700">
+              {job.requirements.map((item, index) => (
+                <li key={index}>{item}</li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>

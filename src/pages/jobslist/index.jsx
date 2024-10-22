@@ -19,7 +19,7 @@ export default function JobsList() {
   useEffect(() => {
     const searchTerm = queryParams.get("searchterm")
     apiHandler(
-      `job/search?value=${searchTerm}`,
+      `job/search?value=${searchTerm || ""}`,
       'GET'
     ).then(async (response) => {
       if (response.ok) {
@@ -44,7 +44,7 @@ export default function JobsList() {
       <>
         <Header />
         <div className="flex items-center justify-center h-screen">
-          <div className="text-red-500 text-xl">No job vacancy found</div>
+          <div className="text-gray-500 text-xl">No job vacancy found</div>
         </div>
       </>
     );

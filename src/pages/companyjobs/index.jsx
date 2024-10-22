@@ -1,6 +1,7 @@
-import React from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import Header from '../../components/header';
+import { apiHandler } from '../../utils/apihandler';
 
 const jobsData = {
   1: [
@@ -24,9 +25,59 @@ const companyData = {
 };
 
 const CompanyJobs = () => {
-  const { id } = useParams();
-  const jobs = jobsData[1] || [];
-  const companyName = companyData[1] || 'Unknown Company';
+  const [jobs, setJobs] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [ companyName, setCompanyName ] = useState("")
+
+
+  const location = useLocation()
+  const queryParams = new URLSearchParams(location.search)
+
+
+  useEffect(() => {
+    const name = queryParams.get("name")
+    setCompanyName(name)
+
+    apiHandler(`company/jobs?company=${name}`, "GET").then(async (response) => {
+      if (response.ok) {
+        const data = await response.json()
+        console.log(data)
+        setJobs(data.job_vacancies)
+        setLoading(false)
+        setError(null)
+      } else {
+        setError("could not get company jobs vacancy")
+        setLoading(false)
+      }
+    }).catch((reason) => {
+      setError(reason)
+      setLoading(false)
+    })
+
+  }, [])
+
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <div className="flex items-center justify-center h-[90vh]">
+          <p className="text-gray-600 text-xl">Loading jobs...</p>
+        </div>
+      </>
+    );
+  }
+
+  if (error) {
+    return (
+      <>
+        <Header />
+        <div className="flex items-center justify-center h-[90vh]">
+          <p className="text-gray-600 text-xl">Unable to get jobs list</p>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -36,9 +87,9 @@ const CompanyJobs = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {jobs.length > 0 ? (
             jobs.map(job => (
-              <Link 
-                key={job.id} 
-                to={`/jobs/${job.id}`} 
+              <Link
+                key={job.id}
+                to={`/jobs/${job.id}`}
                 className="block p-5 bg-white shadow-lg hover:shadow-xl transition duration-300 rounded-lg"
               >
                 <h2 className="text-xl font-semibold">{job.title}</h2>
