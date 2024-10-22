@@ -10,6 +10,9 @@ import CompanyJobList from "./pages/companyjoblist"
 import JobApplicationsPage from "./pages/companyjobapplications"
 import CompaniesList from "./pages/companies"
 import CompanyJobs from "./pages/companyjobs"
+import ProtectedRoute from "./routing/protectroute"
+import UserDashboard from "./pages/userdashboard"
+import AccountSettings from "./pages/accountsettings"
 
 
 const job = {
@@ -33,10 +36,14 @@ function App() {
         {/*Company inside*/}
         <Route path="/company/jobs/create" element={<CreateJobPage />} />
         <Route path="/company/jobs/" element={<CompanyJobList />} />
-        <Route path="/company/jobs/:jobId/applications" element={<JobApplicationsPage />} />
+        <Route path="/company/jobs/:jobId/applications" element={<JobApplicationsPage />} /> {/**TODO integrate with backend*/}
         {/*Common user search company*/}
         <Route path="/companies" element={<CompaniesList />} />
         <Route path="/companies/:companyId" element={<CompanyJobs />} />
+        {/**Dashboards*/}
+        <Route path="/user/dashboard" element={<UserDashboard />} /> {/**<ProtectedRoute element={UserDashboard} /> */} {/**TODO integrate with backend*/}
+        <Route path="/user/account-settings" element={<AccountSettings />} /> {/**TODO integrate with backend*/}
+        {/**TODO company dash board*/}
       </Routes>
     </Router>
   )
