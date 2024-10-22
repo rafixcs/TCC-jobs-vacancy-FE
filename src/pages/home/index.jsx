@@ -10,7 +10,7 @@ function Home() {
   const navigate = useNavigate()
 
   let inputButton = () => {
-    navigate("/jobs")
+    navigate(`/jobs?searchterm=${searchTerm}`)
   }
 
 

@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import Home from "./pages/home"
 import Login from "./pages/login"
 import JobsList from "./pages/jobslist"
-import Job from "./pages/job"
+import JobDetails from "./pages/job"
 import ApplyPage from "./pages/jobapply"
 import RegisterPage from "./pages/createaccount"
 import CreateJobPage from "./pages/jobcreate"
@@ -28,7 +28,7 @@ function App() {
         <Route path="/signin" element={<RegisterPage />} />
         {/*Jobs*/}
         <Route path="/jobs" element={<JobsList />} />
-        <Route path="/jobs/:jobId" element={<Job />} />
+        <Route path="/jobs/:jobId" element={<JobDetails />} />
         <Route path="/jobs/:jobId/apply" element={<ApplyPage />} />
         {/*Company inside*/}
         <Route path="/company/jobs/create" element={<CreateJobPage />} />

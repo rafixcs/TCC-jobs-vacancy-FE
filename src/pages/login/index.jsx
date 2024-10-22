@@ -22,10 +22,10 @@ export default function Login() {
       return;
     }
 
-    if (!isValidEmail(email)) {
+    /*if (!isValidEmail(email)) {
       setErrorMessage("Please, insert a valid email.");
       return;
-    }
+    }*/
 
     setErrorMessage("");
 
@@ -35,7 +35,7 @@ export default function Login() {
         "POST",
         "application/json",
         {
-          username: email,
+          name: email,
           password: password,
         }
       ).then((response) => {

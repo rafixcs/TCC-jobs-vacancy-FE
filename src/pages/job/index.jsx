@@ -1,5 +1,7 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Header from "../../components/header";
+import { useEffect, useState } from "react";
+import { apiHandler } from "../../utils/apihandler";
 
 const sampleJob = {
   title: 'Senior Frontend Developer',
@@ -21,13 +23,80 @@ const sampleJob = {
   salary: '$120,000 - $140,000 per year',
 };
 
-export default function Job({ job }) {
+export default function JobDetails() {
 
-  job = sampleJob
   const navigate = useNavigate()
+  const { jobId } = useParams()
+  const [ job, setJob ] = useState(null)
+  const [ loading, setLoading ] = useState(true)
+  const [ error, setError ] = useState(null)
+
 
   function handleApply() {
-    navigate("/jobs/123/apply")
+    navigate(`/jobs/${jobId}/apply`)
+  }
+
+  useEffect(() => {
+    setJob(sampleJob)
+    setLoading(false)
+
+    apiHandler(`job/${jobId}`, "GET").then(async (response) => {
+      if (response.ok) {
+        const data = await response.json()
+        console.log(data)
+        setJob(data)
+        setError(null)
+        setLoading(false)
+      } else {
+        setError("Job vacancy may not exist")
+        setLoading(false)
+      }
+    }).catch((reason) => {
+
+    })
+
+  }, [])
+
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <div className="flex items-center justify-center h-screen">
+          <svg
+            className="animate-spin h-8 w-8 text-blue-600"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            {/* SVG content for spinner */}
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            ></circle>
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8v8H4z"
+            ></path>
+          </svg>
+        </div>
+      </>
+    );
+  }
+
+  if (error) {
+    return (
+      <>
+        <Header />
+        <div className="flex items-center justify-center h-screen">
+          <div className="text-red-500 text-xl">No job vacancy found</div>
+        </div>
+      </>
+    );
   }
 
   return (
@@ -71,7 +140,7 @@ export default function Job({ job }) {
           </div>
         </div>
 
-        <button 
+        <button
           className="mt-4 px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
           onClick={() => handleApply()}
         >
