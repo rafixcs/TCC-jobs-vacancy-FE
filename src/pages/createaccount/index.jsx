@@ -1,13 +1,18 @@
 import { useState } from 'react';
 import Header from '../../components/header';
-import { apiHandler } from '../../utils/apihandler'
+import { apiHandler } from '../../utils/apihandler';
 
 function RegisterPage() {
   const [formData, setFormData] = useState({
+    accountType: 'individual', // Added accountType
     username: '',
     email: '',
     password: '',
     confirmPassword: '',
+    // Company-specific fields
+    companyName: '',
+    companyEmail: '',
+    companyAddress: '',
   });
 
   const [submitStatus, setSubmitStatus] = useState({
@@ -42,6 +47,23 @@ function RegisterPage() {
       errors.confirmPassword = 'Passwords do not match.';
     }
 
+    // Additional validation for company accounts
+    if (formData.accountType === 'company') {
+      if (!formData.companyName.trim()) {
+        errors.companyName = 'Company name is required.';
+      }
+
+      if (!formData.companyEmail.trim()) {
+        errors.companyEmail = 'Company email is required.';
+      } else if (!emailRegex.test(formData.companyEmail)) {
+        errors.companyEmail = 'Company email is not valid.';
+      }
+
+      if (!formData.companyAddress.trim()) {
+        errors.companyAddress = 'Company address is required.';
+      }
+    }
+
     return errors;
   };
 
@@ -70,45 +92,70 @@ function RegisterPage() {
       return;
     }
 
+    // Build the request body
     const bodyRequest = {
       name: formData.username,
+      email: formData.email,
       password: formData.password,
-      role_id: 2,
+      role_id: formData.accountType === 'company' ? 3 : 2, // Adjust role_id based on account type
+    };
+
+    // Include company data if account type is 'company'
+    if (formData.accountType === 'company') {
+      bodyRequest.company = {
+        name: formData.companyName,
+        email: formData.companyEmail,
+        address: formData.companyAddress,
+      };
     }
 
     try {
-      apiHandler(
-        'user',
-        'POST',
-        'application/json',
-        bodyRequest
-        ).then((response) => {
+      apiHandler('user', 'POST', 'application/json', bodyRequest)
+        .then((response) => {
           if (response.ok) {
             setSubmitStatus({ submitting: false, success: true, error: null });
+            // Reset the form
             setFormData({
+              accountType: 'individual',
               username: '',
               email: '',
               password: '',
               confirmPassword: '',
+              companyName: '',
+              companyEmail: '',
+              companyAddress: '',
             });
           } else {
-            let errorMessage = ""
-            if (response.status == 404) {
-              errorMessage = "Resource not available"
-            } else if (response == 400) {
-              errorMessage = "User already exists"
+            let errorMessage = '';
+            if (response.status === 404) {
+              errorMessage = 'Resource not available';
+            } else if (response.status === 400) {
+              errorMessage = 'User already exists';
             } else {
-              errorMessage = "Unknown error please contact suport"
+              errorMessage = 'Unknown error, please contact support';
             }
 
-            setSubmitStatus({ submitting: false, success: false, error: errorMessage });
+            setSubmitStatus({
+              submitting: false,
+              success: false,
+              error: errorMessage,
+            });
           }
-        }).catch((reason) => {
-          console.log(reason)
-          setSubmitStatus({ submitting: false, success: false, error: 'Failed to register new account' });
         })
+        .catch((reason) => {
+          console.log(reason);
+          setSubmitStatus({
+            submitting: false,
+            success: false,
+            error: 'Failed to register new account',
+          });
+        });
     } catch (error) {
-      setSubmitStatus({ submitting: false, success: false, error: error.message });
+      setSubmitStatus({
+        submitting: false,
+        success: false,
+        error: error.message,
+      });
     }
   };
 
@@ -131,6 +178,24 @@ function RegisterPage() {
         )}
 
         <form onSubmit={handleSubmit} noValidate>
+          {/* Account Type Selection */}
+          <div className="mb-4">
+            <label className="block text-gray-700">
+              Account Type<span className="text-red-500">*</span>
+            </label>
+            <select
+              name="accountType"
+              value={formData.accountType}
+              onChange={handleChange}
+              className="w-full mt-1 p-2 border rounded"
+              required
+            >
+              <option value="individual">Individual</option>
+              <option value="company">Company</option>
+            </select>
+          </div>
+
+          {/* Username */}
           <div className="mb-4">
             <label className="block text-gray-700">
               Username<span className="text-red-500">*</span>
@@ -138,8 +203,9 @@ function RegisterPage() {
             <input
               type="text"
               name="username"
-              className={`w-full mt-1 p-2 border rounded ${errors.username ? 'border-red-500' : ''
-                }`}
+              className={`w-full mt-1 p-2 border rounded ${
+                errors.username ? 'border-red-500' : ''
+              }`}
               value={formData.username}
               onChange={handleChange}
               required
@@ -149,6 +215,7 @@ function RegisterPage() {
             )}
           </div>
 
+          {/* Email Address */}
           <div className="mb-4">
             <label className="block text-gray-700">
               Email Address<span className="text-red-500">*</span>
@@ -156,8 +223,9 @@ function RegisterPage() {
             <input
               type="email"
               name="email"
-              className={`w-full mt-1 p-2 border rounded ${errors.email ? 'border-red-500' : ''
-                }`}
+              className={`w-full mt-1 p-2 border rounded ${
+                errors.email ? 'border-red-500' : ''
+              }`}
               value={formData.email}
               onChange={handleChange}
               required
@@ -167,6 +235,7 @@ function RegisterPage() {
             )}
           </div>
 
+          {/* Password */}
           <div className="mb-4">
             <label className="block text-gray-700">
               Password<span className="text-red-500">*</span>
@@ -174,8 +243,9 @@ function RegisterPage() {
             <input
               type="password"
               name="password"
-              className={`w-full mt-1 p-2 border rounded ${errors.password ? 'border-red-500' : ''
-                }`}
+              className={`w-full mt-1 p-2 border rounded ${
+                errors.password ? 'border-red-500' : ''
+              }`}
               value={formData.password}
               onChange={handleChange}
               required
@@ -185,6 +255,7 @@ function RegisterPage() {
             )}
           </div>
 
+          {/* Confirm Password */}
           <div className="mb-6">
             <label className="block text-gray-700">
               Confirm Password<span className="text-red-500">*</span>
@@ -192,21 +263,97 @@ function RegisterPage() {
             <input
               type="password"
               name="confirmPassword"
-              className={`w-full mt-1 p-2 border rounded ${errors.confirmPassword ? 'border-red-500' : ''
-                }`}
+              className={`w-full mt-1 p-2 border rounded ${
+                errors.confirmPassword ? 'border-red-500' : ''
+              }`}
               value={formData.confirmPassword}
               onChange={handleChange}
               required
             />
             {errors.confirmPassword && (
-              <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {errors.confirmPassword}
+              </p>
             )}
           </div>
 
+          {/* Company Fields */}
+          {formData.accountType === 'company' && (
+            <>
+              {/* Company Name */}
+              <div className="mb-4">
+                <label className="block text-gray-700">
+                  Company Name<span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="companyName"
+                  className={`w-full mt-1 p-2 border rounded ${
+                    errors.companyName ? 'border-red-500' : ''
+                  }`}
+                  value={formData.companyName}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.companyName && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.companyName}
+                  </p>
+                )}
+              </div>
+
+              {/* Company Email */}
+              <div className="mb-4">
+                <label className="block text-gray-700">
+                  Company Email<span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="email"
+                  name="companyEmail"
+                  className={`w-full mt-1 p-2 border rounded ${
+                    errors.companyEmail ? 'border-red-500' : ''
+                  }`}
+                  value={formData.companyEmail}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.companyEmail && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.companyEmail}
+                  </p>
+                )}
+              </div>
+
+              {/* Company Address */}
+              <div className="mb-6">
+                <label className="block text-gray-700">
+                  Company Address<span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="companyAddress"
+                  className={`w-full mt-1 p-2 border rounded ${
+                    errors.companyAddress ? 'border-red-500' : ''
+                  }`}
+                  value={formData.companyAddress}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.companyAddress && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.companyAddress}
+                  </p>
+                )}
+              </div>
+            </>
+          )}
+
+          {/* Submit Button */}
           <button
             type="submit"
-            className={`w-full px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 ${submitStatus.submitting ? 'opacity-50 cursor-not-allowed' : ''
-              }`}
+            className={`w-full px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 ${
+              submitStatus.submitting ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
             disabled={submitStatus.submitting}
           >
             {submitStatus.submitting ? 'Registering...' : 'Register'}
