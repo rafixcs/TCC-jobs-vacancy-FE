@@ -1,39 +1,26 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../../components/header';
+import { apiHandler } from '../../utils/apihandler';
 
 function CompanyJobList() {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Replace with your API endpoint and include authentication headers if necessary
-    /*fetch('https://api.example.com/company/jobs', {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${yourAuthToken}`, // Include auth token if required
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setJobs(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error('Error fetching company jobs:', error);
-        setLoading(false);
-      });*/
-
-      const jobs_sample = [
-        { id: 1, company: 'TechCorp', title: 'Frontend Developer', location: "teste0", postedAt: "2024-10-12" },
-        { id: 2, company: 'DataSoft', title: 'Backend Engineer', location: "teste1", postedAt: "2024-10-13" },
-        { id: 3, company: 'WebSolutions', title: 'Full Stack Developer', location: "teste2", postedAt: "2024-10-14" },
-        // Add more job listings as needed
-      ];
-
-      setJobs(jobs_sample)
+    apiHandler("company/jobs", "GET").then(async (response) => {
+      if (response.ok) {
+        const data = await response.json()
+        setJobs(data.job_vacancies)
+        setLoading(false)
+      } else {
+        console.log(response)
+        setLoading(false)
+      }
+    }).catch((reason) => {
+      console.log(reason)
       setLoading(false)
-
+    })
 
   }, []);
 
@@ -61,7 +48,7 @@ function CompanyJobList() {
                   <h2 className="text-2xl font-semibold">{job.title}</h2>
                   <p className="text-gray-500 mt-2">{job.location}</p>
                   <p className="text-gray-400 text-sm mt-1">
-                    Posted on {new Date(job.postedAt).toLocaleDateString()}
+                    Posted on {new Date(job.creation_date).toLocaleDateString()}
                   </p>
                 </Link>
               </li>

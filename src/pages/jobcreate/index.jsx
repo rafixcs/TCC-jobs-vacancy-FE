@@ -5,7 +5,6 @@ import { apiHandler } from '../../utils/apihandler';
 function CreateJobPage() {
   const [formData, setFormData] = useState({
     title: '',
-    company: '',
     description: '',
     responsibilities: [''],
     requirements: [''],
@@ -30,9 +29,6 @@ function CreateJobPage() {
 
     if (!formData.title.trim()) {
       errors.title = 'Job title is required.';
-    }
-    if (!formData.company.trim()) {
-      errors.company = 'Company name is required.';
     }
     if (!formData.description.trim()) {
       errors.description = 'Job description is required.';
@@ -116,7 +112,6 @@ function CreateJobPage() {
         // Optionally reset the form
         setFormData({
           title: '',
-          company: '',
           description: '',
           responsibilities: [''],
           requirements: [''],
@@ -173,27 +168,6 @@ function CreateJobPage() {
             />
             {errors.title && (
               <p className="text-red-500 text-sm mt-1">{errors.title}</p>
-            )}
-          </div>
-
-          {/* Company Name */}
-          <div className="mb-4">
-            <label htmlFor="company" className="block text-gray-700">
-              Company Name<span className="text-red-500">*</span>
-            </label>
-            <input
-              id="company"
-              type="text"
-              name="company"
-              className={`w-full mt-1 p-2 border rounded ${
-                errors.company ? 'border-red-500' : ''
-              }`}
-              value={formData.company}
-              onChange={handleChange}
-              required
-            />
-            {errors.company && (
-              <p className="text-red-500 text-sm mt-1">{errors.company}</p>
             )}
           </div>
 

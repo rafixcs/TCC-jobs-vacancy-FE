@@ -13,7 +13,7 @@ export default function JobsList() {
   const [ jobs, setJobs ] = useState([])
 
   function handleJob(job) {
-    navigate(`/jobs/${job.job_id}`)
+    navigate(`/jobs/${job.id}`)
   }
 
   useEffect(() => {
@@ -59,7 +59,7 @@ export default function JobsList() {
           <ul className="space-y-6">
             {jobs.map((job) => (
               <li
-                key={job.job_id}
+                key={job.id}
                 className="p-6 border rounded-lg shadow hover:shadow-lg transition-shadow"
                 onClick={() => handleJob(job)}
               >

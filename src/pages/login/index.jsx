@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { apiHandler } from "../../utils/apihandler";
 import { useNavigate } from "react-router-dom";
 import Header from "../../components/header";
+import { AuthContext } from "../../provider/authcontext";
 
 function isValidEmail(email) {
   const emailFormat = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -13,6 +14,8 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
+
+  const { isAuthenticated, login } = useContext(AuthContext);
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -41,7 +44,8 @@ export default function Login() {
       ).then((response) => {
         if (response.ok) {
           response.json().then((data) => {
-            sessionStorage.setItem("token", data.token);
+            //sessionStorage.setItem("token", data.token);
+            login(data.token, data.role_id)
             navigate("/")
           })
         } else {
@@ -55,6 +59,10 @@ export default function Login() {
 
   function handleCreateAccount() {
     navigate("/signin")
+  }
+
+  if (isAuthenticated) {
+    navigate("/")
   }
 
   return (

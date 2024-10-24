@@ -1,6 +1,16 @@
+// Header.js
 import { Link } from 'react-router-dom';
+import { useContext } from 'react';
+import { AuthContext } from '../../provider/authcontext';
 
 const Header = () => {
+  const { isAuthenticated, logout } = useContext(AuthContext);
+
+  const handleLogout = () => {
+    logout();
+    // Optionally, redirect to home page or login page
+  };
+
   return (
     <header className="bg-gradient-to-r from-slate-500 to-slate-200 shadow sticky top-0 z-50">
       <nav className="container mx-auto flex justify-between items-center p-6">
@@ -10,7 +20,7 @@ const Header = () => {
         </div>
 
         {/* Navigation Links */}
-        <ul className="hidden md:flex space-x-6">
+        <ul className="hidden md:flex space-x-6 items-center">
           <li>
             <Link to="/" className="text-gray-700 hover:text-blue-500">
               Home
@@ -31,15 +41,35 @@ const Header = () => {
               About
             </Link>
           </li>
-          <li>
-            <Link to="/signup" className="text-gray-700 hover:text-blue-500">
-              Login
-            </Link>
-          </li>
+
+          {isAuthenticated ? (
+            <>
+              <li>
+                <Link to="/user/dashboard" className="text-gray-700 hover:text-blue-500">
+                  Account
+                </Link>
+              </li>
+              <li>
+                <button
+                  onClick={handleLogout}
+                  className="text-gray-700 hover:text-blue-500 focus:outline-none"
+                >
+                  Logout
+                </button>
+              </li>
+            </>
+          ) : (
+            <li>
+              <Link to="/signup" className="text-gray-700 hover:text-blue-500">
+                Login
+              </Link>
+            </li>
+          )}
         </ul>
 
         {/* Mobile Menu Button */}
         <div className="md:hidden">
+          {/* Implement mobile menu toggle if needed */}
         </div>
       </nav>
     </header>

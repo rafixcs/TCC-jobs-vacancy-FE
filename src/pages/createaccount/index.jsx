@@ -97,7 +97,7 @@ function RegisterPage() {
       name: formData.username,
       email: formData.email,
       password: formData.password,
-      role_id: formData.accountType === 'company' ? 3 : 2, // Adjust role_id based on account type
+      role_id: formData.accountType === 'company' ? 1 : 0,
     };
 
     // Include company data if account type is 'company'
@@ -105,7 +105,7 @@ function RegisterPage() {
       bodyRequest.company = {
         name: formData.companyName,
         email: formData.companyEmail,
-        address: formData.companyAddress,
+        location: formData.companyAddress,
       };
     }
 
