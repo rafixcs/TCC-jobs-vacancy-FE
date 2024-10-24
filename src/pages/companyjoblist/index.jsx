@@ -44,7 +44,7 @@ function CompanyJobList() {
                 key={job.id}
                 className="p-6 border rounded-lg shadow hover:shadow-lg transition-shadow"
               >
-                <Link to={`/company/jobs/${job.id}/applications`} className="block">
+                <Link to={`/company/jobs/${job.id}/applications?title=${job.title}`} className="block">
                   <h2 className="text-2xl font-semibold">{job.title}</h2>
                   <p className="text-gray-500 mt-2">{job.location}</p>
                   <p className="text-gray-400 text-sm mt-1">

@@ -57,7 +57,6 @@ export function AuthProvider({ children }) {
     }).catch((reason) => {
       console.log(reason)
     })
-
   };
 
   return (

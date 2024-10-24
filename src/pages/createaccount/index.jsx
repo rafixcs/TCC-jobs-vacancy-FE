@@ -9,6 +9,7 @@ function RegisterPage() {
     email: '',
     password: '',
     confirmPassword: '',
+    phone: '',
     // Company-specific fields
     companyName: '',
     companyEmail: '',
@@ -45,6 +46,10 @@ function RegisterPage() {
 
     if (formData.password !== formData.confirmPassword) {
       errors.confirmPassword = 'Passwords do not match.';
+    }
+
+    if (!formData.phone) {
+      errors.phone = 'Phone number is required'
     }
 
     // Additional validation for company accounts
@@ -97,6 +102,7 @@ function RegisterPage() {
       name: formData.username,
       email: formData.email,
       password: formData.password,
+      phone: formData.phone,
       role_id: formData.accountType === 'company' ? 1 : 0,
     };
 
@@ -232,6 +238,26 @@ function RegisterPage() {
             />
             {errors.email && (
               <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+            )}
+          </div>
+
+          {/* Phone number */}
+          <div className="mb-4">
+            <label className="block text-gray-700">
+              Phone number<span className="text-red-500">*</span>
+            </label>
+            <input
+              type="phone"
+              name="phone"
+              className={`w-full mt-1 p-2 border rounded ${
+                errors.phone ? 'border-red-500' : ''
+              }`}
+              value={formData.phone}
+              onChange={handleChange}
+              required
+            />
+            {errors.phone && (
+              <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
             )}
           </div>
 

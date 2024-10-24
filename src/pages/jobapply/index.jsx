@@ -1,13 +1,20 @@
-import { useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import Header from '../../components/header';
+import { AuthContext } from '../../provider/authcontext';
+import { useLocation, useParams } from 'react-router-dom';
+import { apiHandler } from '../../utils/apihandler';
 
-export default function ApplyPage({ job }) {
+export default function ApplyPage() {
 
-  job = {
-    id: 1,
-    title: 'Senior Frontend Developer',
-    company: 'TechCorp Inc.',
-  };
+  const location = useLocation()
+  const queryParams = new URLSearchParams(location.search)
+  const { jobId } = useParams()
+  const { isAuthenticated, logout } = useContext(AuthContext);
+  const [job, setJob] = useState({
+    id: 0,
+    title: '',
+    company: '',
+  })
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -22,6 +29,36 @@ export default function ApplyPage({ job }) {
     success: null,
     error: null,
   });
+
+  const [ loading, setLoading ] = useState(true)
+  useEffect(() => {
+    const title = queryParams.get("title")
+    const company = queryParams.get("company")
+    
+    setJob({
+      id: jobId,
+      title: title,
+      company: company,
+    })
+
+    apiHandler("user", "GET").then(async (response) => {
+      if(response.ok) {
+        const data = await response.json()
+        setFormData({
+          email: data.email,
+          phone: data.phone,
+          fullName: data.name,
+        })
+        setLoading(false)
+      } else {
+        console.log(response)
+        setLoading(false)
+      }
+    }).catch((reason) => {
+      console.log(reason)
+      setLoading(false)
+    })
+  }, [])
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -44,24 +81,20 @@ export default function ApplyPage({ job }) {
     setSubmitStatus({ submitting: true, success: null, error: null });
 
     try {
-      // Create a FormData object to send form data including files
-      const data = new FormData();
-      data.append('fullName', formData.fullName);
-      data.append('email', formData.email);
-      data.append('phone', formData.phone);
-      data.append('coverLetter', formData.coverLetter);
-      data.append('resume', formData.resume);
-      data.append('jobId', job.id);
+      const data = {
+        full_name: formData.fullName,
+        email: formData.email,
+        phone: formData.phone,
+        cover_letter: formData.coverLetter,
+        job_id: jobId,
+      }
 
-      // Replace with your API endpoint
-      const response = await fetch('https://api.example.com/apply', {
-        method: 'POST',
-        body: data,
-      });
-
+      console.log(jobId)
+      console.log(formData)
+      console.log(data)
+      const response = await apiHandler("job/apply", "POST", "application/json", data)
       if (response.ok) {
         setSubmitStatus({ submitting: false, success: true, error: null });
-        // Optionally reset the form
         setFormData({
           fullName: '',
           email: '',
@@ -76,6 +109,17 @@ export default function ApplyPage({ job }) {
       setSubmitStatus({ submitting: false, success: false, error: error.message });
     }
   };
+
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <div className="flex items-center justify-center h-[90vh]">
+          <p className="text-gray-600 text-xl">Loading jobs...</p>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>

@@ -3,26 +3,6 @@ import Header from "../../components/header";
 import { useEffect, useState } from "react";
 import { apiHandler } from "../../utils/apihandler";
 
-const sampleJob = {
-  title: 'Senior Frontend Developer',
-  company: 'TechCorp Inc.',
-  description:
-    'We are looking for a Senior Frontend Developer to join our dynamic team. You will be responsible for building and maintaining web applications that deliver an exceptional user experience.',
-  responsibilities: [
-    'Develop new user-facing features using React.js',
-    'Build reusable components and front-end libraries',
-    'Optimize components for maximum performance across devices and browsers',
-  ],
-  requirements: [
-    '5+ years of experience in frontend development',
-    'Strong proficiency in JavaScript and React.js',
-    'Experience with Tailwind CSS or other CSS frameworks',
-    'Familiarity with RESTful APIs',
-  ],
-  location: 'New York, NY',
-  salary: '$120,000 - $140,000 per year',
-};
-
 export default function JobDetails() {
 
   const navigate = useNavigate()
@@ -37,9 +17,6 @@ export default function JobDetails() {
   }
 
   useEffect(() => {
-    setJob(sampleJob)
-    setLoading(false)
-
     apiHandler(`job/${jobId}`, "GET").then(async (response) => {
       if (response.ok) {
         const data = await response.json()
