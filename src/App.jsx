@@ -14,13 +14,6 @@ import ProtectedRoute from "./routing/protectroute"
 import UserDashboard from "./pages/userdashboard"
 import AccountSettings from "./pages/accountsettings"
 
-
-const job = {
-  id: 1,
-  title: 'Senior Frontend Developer',
-  company: 'TechCorp Inc.',
-};
-
 function App() {
   return (
     <Router>
