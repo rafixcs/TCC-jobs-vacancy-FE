@@ -6,12 +6,12 @@ import JobDetails from "./pages/job"
 import ApplyPage from "./pages/jobapply"
 import RegisterPage from "./pages/createaccount"
 import CreateJobPage from "./pages/jobcreate"
-import CompanyJobList from "./pages/companyjoblist"
+import CompanyJobListPage from "./pages/companyjoblist"
 import JobApplicationsPage from "./pages/companyjobapplications"
 import CompaniesList from "./pages/companies"
 import CompanyJobs from "./pages/companyjobs"
 import ProtectedRoute from "./routing/protectroute"
-import UserDashboard from "./pages/userdashboard"
+import UserDashboardPage from "./pages/userdashboard"
 import AccountSettings from "./pages/accountsettings"
 
 function App() {
@@ -28,13 +28,13 @@ function App() {
         <Route path="/jobs/:jobId/apply" element={<ApplyPage />} />
         {/*Company inside*/}
         <Route path="/company/jobs/create" element={<CreateJobPage />} />
-        <Route path="/company/jobs/" element={<CompanyJobList />} />
+        <Route path="/company/jobs/" element={<CompanyJobListPage />} />
         <Route path="/company/jobs/:jobId/applications" element={<JobApplicationsPage />} /> {/**TODO integrate with backend*/}
         {/*Common user search company*/}
         <Route path="/companies" element={<CompaniesList />} />
         <Route path="/companies/:companyId" element={<CompanyJobs />} />
         {/**Dashboards*/}
-        <Route path="/user/dashboard" element={<UserDashboard />} /> {/**<ProtectedRoute element={UserDashboard} /> */} {/**TODO integrate with backend*/}
+        <Route path="/user/dashboard" element={<UserDashboardPage />} /> {/**<ProtectedRoute element={UserDashboard} /> */} {/**TODO integrate with backend*/}
         <Route path="/user/account-settings" element={<AccountSettings />} /> {/**TODO integrate with backend*/}
         {/**TODO company dash board*/}
       </Routes>

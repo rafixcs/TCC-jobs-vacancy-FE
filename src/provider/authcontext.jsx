@@ -8,7 +8,7 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null); // User object or null
   const [token, setToken] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userRoleId, setUserRoleId] = useState(null)
+  const [userRoleId, setUserRoleId] = useState(0)
 
   useEffect(() => {
     const storedToken = sessionStorage.getItem('token');
@@ -18,16 +18,14 @@ export function AuthProvider({ children }) {
       setIsAuthenticated(false)
     }
     
-    /*if (storedToken) {
-      // Validate token and fetch user data
-      fetch('https://api.example.com/auth/validate-token', {
-        headers: {
-          'Authorization': `Bearer ${storedToken}`,
-        },
-      })
+    if (isAuthenticated) {
+      console.log(`fetch user data`)
+      console.log(userRoleId)
+      apiHandler("user", "GET")
         .then((response) => response.json())
         .then((data) => {
-          setUser(data.user);
+          setUser(data);
+          console.log(data)
           setToken(storedToken);
           setIsAuthenticated(true);
         })
@@ -35,14 +33,15 @@ export function AuthProvider({ children }) {
           console.error('Error validating token:', error);
           setIsAuthenticated(false);
         });
-    }*/
-  }, []);
+    }
+  }, [isAuthenticated]);
 
-  const login = (token, userRoleId) => {
-    setToken(token);
+  const login = (_token, roleId) => {
+    console.log(`role id: ${roleId}`)
+    setUserRoleId(roleId)
+    setToken(_token);
     setIsAuthenticated(true);
-    setUserRoleId(userRoleId)
-    sessionStorage.setItem('token', token);
+    sessionStorage.setItem('token', _token);
   };
 
   const logout = () => {

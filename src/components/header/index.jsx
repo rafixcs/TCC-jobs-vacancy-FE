@@ -4,12 +4,14 @@ import { useContext } from 'react';
 import { AuthContext } from '../../provider/authcontext';
 
 const Header = () => {
-  const { isAuthenticated, logout } = useContext(AuthContext);
+  const { user, isAuthenticated, logout } = useContext(AuthContext);
 
   const handleLogout = () => {
     logout();
     // Optionally, redirect to home page or login page
   };
+
+  console.log(`header user: ${user}`)
 
   return (
     <header className="bg-gradient-to-r from-slate-500 to-slate-200 shadow sticky top-0 z-50">
