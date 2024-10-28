@@ -113,6 +113,17 @@ export default function JobDetails() {
 
         <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
+            <h2 className="text-2xl font-semibold mb-2">Job Type</h2>
+            <p className="text-gray-700">{job.job_type}</p>
+          </div>
+          <div>
+            <h2 className="text-2xl font-semibold mb-2">Experience Level</h2>
+            <p className="text-gray-700">{job.experience_level}</p>
+          </div>
+        </div>
+
+        <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
             <h2 className="text-2xl font-semibold mb-2">Location</h2>
             <p className="text-gray-700">{job.location}</p>
           </div>

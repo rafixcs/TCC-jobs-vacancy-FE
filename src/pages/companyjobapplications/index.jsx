@@ -19,8 +19,7 @@ function JobApplicationsPage() {
     apiHandler(`job/applies?job_id=${jobId}`, "GET").then(async (response) => {
       if (response.ok) {
         const data = await response.json()
-        console.log(data)
-        setApplications(data.user_applies)
+        setApplications(data.user_applies || [])
         setLoading(false)
       } else {
         console.log(response)

@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import Header from '../../components/header';
+import { AuthContext } from '../../provider/authcontext';
 
 const sampleUser = {
     name: 'Jane Doe',
@@ -8,12 +9,12 @@ const sampleUser = {
   };
 
 function AccountSettings() {
-  const isCompany = userRoleId === 1;
-  const [user, setUser] = useState({
+  const { user } = useContext(AuthContext);
+  /*const [user, setUser] = useState({
     name: '',
     email: '',
     profilePicture: '',
-  })
+  })*/
   const [profileData, setProfileData] = useState({
     name: '',
     email: '',
@@ -28,7 +29,6 @@ function AccountSettings() {
   const [passwordMessage, setPasswordMessage] = useState('');
 
   useEffect(() => {
-    setUser(sampleUser)
     if (user) {
       setProfileData({
         name: user.name,
@@ -37,7 +37,7 @@ function AccountSettings() {
       });
       
     }    
-  }, []);
+  }, [user]);
 
   // Handle profile form submission
   const handleProfileSubmit = async (e) => {

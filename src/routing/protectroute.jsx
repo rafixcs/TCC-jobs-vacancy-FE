@@ -1,9 +1,12 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
+import { useAuth } from '../provider/authcontext';
 
-function ProtectedRoute({ element: Element, ...rest }) {
-  const { isAuthenticated } = sessionStorage.getItem("token") !== "";
+export const ProtectedRoute = ({ element: Element, ...rest }) => {
+  const { isAuthenticated, userRoleId } = useAuth();
 
-  return isAuthenticated ? <Element {...rest} /> : <Navigate to="/signup" />;
+  if (!isAuthenticated) {
+    return <Navigate to="/signup" replace />
+  }
+
+  return <Outlet />;
 }
-
-export default ProtectedRoute;

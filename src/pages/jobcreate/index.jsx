@@ -10,9 +10,9 @@ function CreateJobPage() {
     requirements: [''],
     location: '',
     salary: '',
-    jobType: '',
-    experienceLevel: '',
-    tags: '',
+    job_type: '',
+    experience_level: '',
+    //tags: '',
     logoUrl: '',
   });
 
@@ -39,11 +39,11 @@ function CreateJobPage() {
     if (!formData.salary.trim()) {
       errors.salary = 'Salary information is required.';
     }
-    if (!formData.jobType.trim()) {
-      errors.jobType = 'Job type is required.';
+    if (!formData.job_type.trim()) {
+      errors.job_type = 'Job type is required.';
     }
-    if (!formData.experienceLevel.trim()) {
-      errors.experienceLevel = 'Experience level is required.';
+    if (!formData.experience_level.trim()) {
+      errors.experience_level = 'Experience level is required.';
     }
 
     return errors;
@@ -117,9 +117,9 @@ function CreateJobPage() {
           requirements: [''],
           location: '',
           salary: '',
-          jobType: '',
-          experienceLevel: '',
-          tags: '',
+          job_type: '',
+          experience_level: '',
+          //tags: '',
           logoUrl: '',
         });
       } else {
@@ -298,16 +298,16 @@ function CreateJobPage() {
           {/* Job Type and Experience Level */}
           <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="jobType" className="block text-gray-700">
+              <label htmlFor="job_type" className="block text-gray-700">
                 Job Type<span className="text-red-500">*</span>
               </label>
               <select
-                id="jobType"
-                name="jobType"
+                id="job_type"
+                name="job_type"
                 className={`w-full mt-1 p-2 border rounded ${
-                  errors.jobType ? 'border-red-500' : ''
+                  errors.job_type ? 'border-red-500' : ''
                 }`}
-                value={formData.jobType}
+                value={formData.job_type}
                 onChange={handleChange}
                 required
               >
@@ -318,21 +318,21 @@ function CreateJobPage() {
                 <option value="Internship">Internship</option>
                 <option value="Temporary">Temporary</option>
               </select>
-              {errors.jobType && (
-                <p className="text-red-500 text-sm mt-1">{errors.jobType}</p>
+              {errors.job_type && (
+                <p className="text-red-500 text-sm mt-1">{errors.job_type}</p>
               )}
             </div>
             <div>
-              <label htmlFor="experienceLevel" className="block text-gray-700">
+              <label htmlFor="experience_level" className="block text-gray-700">
                 Experience Level<span className="text-red-500">*</span>
               </label>
               <select
-                id="experienceLevel"
-                name="experienceLevel"
+                id="experience_level"
+                name="experience_level"
                 className={`w-full mt-1 p-2 border rounded ${
-                  errors.experienceLevel ? 'border-red-500' : ''
+                  errors.experience_level ? 'border-red-500' : ''
                 }`}
-                value={formData.experienceLevel}
+                value={formData.experience_level}
                 onChange={handleChange}
                 required
               >
@@ -343,14 +343,15 @@ function CreateJobPage() {
                 <option value="Manager">Manager</option>
                 <option value="Director">Director</option>
               </select>
-              {errors.experienceLevel && (
-                <p className="text-red-500 text-sm mt-1">{errors.experienceLevel}</p>
+              {errors.experience_level && (
+                <p className="text-red-500 text-sm mt-1">{errors.experience_level}</p>
               )}
             </div>
           </div>
 
           {/* Tags */}
-          <div className="mb-4">
+          {/* NOT IMPLEMENTED
+            <div className="mb-4">
             <label htmlFor="tags" className="block text-gray-700">
               Tags (comma-separated)
             </label>
@@ -363,7 +364,7 @@ function CreateJobPage() {
               onChange={handleChange}
               placeholder="e.g., Remote, JavaScript, Full Stack"
             />
-          </div>
+          </div>*/}
 
           {/* Company Logo URL */}
           <div className="mb-4">

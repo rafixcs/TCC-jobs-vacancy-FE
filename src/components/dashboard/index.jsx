@@ -7,34 +7,31 @@ import { AuthContext } from '../../provider/authcontext';
 function UserDashboard() {
   const navigate = useNavigate();
   const [appliedJobs, setAppliedJobs] = useState([]);
-  //const [savedJobs, setSavedJobs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isCompany, setIsCompany] = useState(false)
 
-  const { userRoleId, user, isAuthenticated } = useContext(AuthContext);
-  const isCompany = userRoleId === 1;
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
-    console.log(isAuthenticated)
-    console.log(user)
-    console.log(userRoleId)
-
     if (!sessionStorage.getItem("token") === "") {
       navigate('/login');
     } else {
       fetchUserData();
-      //setAppliedJobs(sampleAppliedJobs)
-      //setSavedJobs(sampleSavedJobs)
-      //setUser(sampleUser)
-      //setLoading(false)
     }
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      setIsCompany(user.role_id === 1)
+    }
+  }, [user]) 
 
   const fetchUserData = async () => {
     try {
       const appliedResponse = await apiHandler("job/user", "GET")
       const appliedData = await appliedResponse.json();
       console.log(appliedData)
-      setAppliedJobs(appliedData.JobApplies);
+      setAppliedJobs(appliedData.JobApplies || []);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching user data:', error);
@@ -76,10 +73,22 @@ function UserDashboard() {
 
         {/* Company-Specific Section */}
         {isCompany && (
+          <>
           <div className="mb-8">
             <h2 className="text-2xl font-semibold mb-4">Your Job Listings</h2>
             <CompanyJobListings isHideTitle={true} />
           </div>
+
+          <div>
+          <h2 className="text-2xl font-semibold mb-4">Create job vacancy</h2>
+          <button
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            onClick={() => navigate('/company/jobs/create')}
+          >
+            Add new job vacancy
+          </button>
+          </div>
+          </>
         )}
 
         {/* Applied Jobs */}
@@ -101,31 +110,6 @@ function UserDashboard() {
               </ul>
             ) : (
               <p className="text-gray-600">You have not applied to any jobs yet.</p>
-            )}
-          </div>
-        )}
-
-        {/* Saved Jobs - NOT IMPLEMENTED*/}
-        {!isCompany && false && (
-          <div className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">Saved Jobs</h2>
-            {savedJobs.length > 0 ? (
-              <ul className="space-y-4">
-                {savedJobs.map((job) => (
-                  <li key={job.id} className="p-4 border rounded-lg shadow">
-                    <h3 className="text-xl font-semibold">{job.title}</h3>
-                    <p className="text-gray-500">{job.company}</p>
-                    <button
-                      className="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-                      onClick={() => removeSavedJob(job.id)}
-                    >
-                      Remove
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-gray-600">You have no saved jobs.</p>
             )}
           </div>
         )}

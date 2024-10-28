@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { apiHandler } from '../../utils/apihandler';
 
-function CompanyJobList({isHideTitle}) {
+function CompanyJobList({ isHideTitle }) {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -12,7 +12,8 @@ function CompanyJobList({isHideTitle}) {
     apiHandler("company/jobs", "GET").then(async (response) => {
       if (response.ok) {
         const data = await response.json()
-        setJobs(data.job_vacancies)
+        console.log(data.job_vacancies)
+        setJobs(data.job_vacancies || [])
         setLoading(false)
       } else {
         console.log(response)

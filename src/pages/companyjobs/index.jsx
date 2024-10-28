@@ -3,27 +3,6 @@ import { useEffect, useState } from 'react';
 import Header from '../../components/header';
 import { apiHandler } from '../../utils/apihandler';
 
-const jobsData = {
-  1: [
-    { id: 1, title: 'Frontend Developer', location: 'New York' },
-    { id: 2, title: 'Backend Developer', location: 'Remote' }
-  ],
-  2: [
-    { id: 3, title: 'Solar Engineer', location: 'San Francisco' },
-    { id: 4, title: 'Sustainability Analyst', location: 'Remote' }
-  ],
-  3: [
-    { id: 5, title: 'Marketing Manager', location: 'Los Angeles' },
-    { id: 6, title: 'Content Strategist', location: 'Remote' }
-  ]
-};
-
-const companyData = {
-  1: 'Tech Solutions',
-  2: 'Green Energy Corp',
-  3: 'Marketing World'
-};
-
 const CompanyJobs = () => {
   const [jobs, setJobs] = useState([])
   const [loading, setLoading] = useState(true)
@@ -43,7 +22,7 @@ const CompanyJobs = () => {
       if (response.ok) {
         const data = await response.json()
         console.log(data)
-        setJobs(data.job_vacancies)
+        setJobs(data.job_vacancies || [])
         setLoading(false)
         setError(null)
       } else {

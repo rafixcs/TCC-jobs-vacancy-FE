@@ -25,10 +25,10 @@ export default function Login() {
       return;
     }
 
-    /*if (!isValidEmail(email)) {
+    if (!isValidEmail(email)) {
       setErrorMessage("Please, insert a valid email.");
       return;
-    }*/
+    }
 
     setErrorMessage("");
 
@@ -38,13 +38,12 @@ export default function Login() {
         "POST",
         "application/json",
         {
-          name: email,
+          email: email,
           password: password,
         }
       ).then((response) => {
         if (response.ok) {
           response.json().then((data) => {
-            //sessionStorage.setItem("token", data.token);
             login(data.token, data.role_id)
             navigate("/")
           })

@@ -10,7 +10,7 @@ import CompanyJobListPage from "./pages/companyjoblist"
 import JobApplicationsPage from "./pages/companyjobapplications"
 import CompaniesList from "./pages/companies"
 import CompanyJobs from "./pages/companyjobs"
-import ProtectedRoute from "./routing/protectroute"
+import { ProtectedRoute } from "./routing/protectroute"
 import UserDashboardPage from "./pages/userdashboard"
 import AccountSettings from "./pages/accountsettings"
 
@@ -26,17 +26,21 @@ function App() {
         <Route path="/jobs" element={<JobsList />} />
         <Route path="/jobs/:jobId" element={<JobDetails />} />
         <Route path="/jobs/:jobId/apply" element={<ApplyPage />} />
-        {/*Company inside*/}
-        <Route path="/company/jobs/create" element={<CreateJobPage />} />
-        <Route path="/company/jobs/" element={<CompanyJobListPage />} />
-        <Route path="/company/jobs/:jobId/applications" element={<JobApplicationsPage />} /> {/**TODO integrate with backend*/}
         {/*Common user search company*/}
         <Route path="/companies" element={<CompaniesList />} />
         <Route path="/companies/:companyId" element={<CompanyJobs />} />
-        {/**Dashboards*/}
-        <Route path="/user/dashboard" element={<UserDashboardPage />} /> {/**<ProtectedRoute element={UserDashboard} /> */} {/**TODO integrate with backend*/}
-        <Route path="/user/account-settings" element={<AccountSettings />} /> {/**TODO integrate with backend*/}
-        {/**TODO company dash board*/}
+        
+        {/**Protected routes */}
+        <Route element={<ProtectedRoute />}>
+          {/*Company inside*/}
+          <Route path="/company/jobs/create" element={<CreateJobPage />} />
+          <Route path="/company/jobs/" element={<CompanyJobListPage />} />
+          <Route path="/company/jobs/:jobId/applications" element={<JobApplicationsPage />} />
+
+          {/**Dashboards*/}
+          <Route path="/user/dashboard" element={<UserDashboardPage />} />
+          <Route path="/user/account-settings" element={<AccountSettings />} />
+        </Route>
       </Routes>
     </Router>
   )
