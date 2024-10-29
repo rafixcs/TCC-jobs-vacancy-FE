@@ -13,12 +13,14 @@ import CompanyJobs from "./pages/companyjobs"
 import { ProtectedRoute } from "./routing/protectroute"
 import UserDashboardPage from "./pages/userdashboard"
 import AccountSettings from "./pages/accountsettings"
+import AboutPage from "./pages/about"
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/about" element={<AboutPage />} />
         {/*Account*/}
         <Route path="/signup" element={<Login />} />
         <Route path="/signin" element={<RegisterPage />} />

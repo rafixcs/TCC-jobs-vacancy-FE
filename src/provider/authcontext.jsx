@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect, useContext } from 'react';
 import { apiHandler } from '../utils/apihandler';
+import { useNavigate } from 'react-router-dom';
 
 export const AuthContext = createContext();
 
@@ -43,8 +44,8 @@ export const AuthProvider = ({ children }) => {
     sessionStorage.setItem('token', _token);
   };
 
-  const logout = () => {
-    apiHandler("logout", "POST").then((response) => {
+  const logout = async () => {
+    await apiHandler("logout", "POST").then((response) => {
       if (response.ok) {
         setToken(null);
         setIsAuthenticated(false);

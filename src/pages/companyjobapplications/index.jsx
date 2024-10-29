@@ -19,6 +19,7 @@ function JobApplicationsPage() {
     apiHandler(`job/applies?job_id=${jobId}`, "GET").then(async (response) => {
       if (response.ok) {
         const data = await response.json()
+        console.log(data)
         setApplications(data.user_applies || [])
         setLoading(false)
       } else {
@@ -60,7 +61,7 @@ function JobApplicationsPage() {
                     <p className="text-gray-500 mt-1">{app.phone}</p>
                   </div>
                   <a
-                    href={app.resumeUrl}
+                    href={app.url_resume}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-600 hover:underline"

@@ -81,18 +81,19 @@ export default function ApplyPage() {
     setSubmitStatus({ submitting: true, success: null, error: null });
 
     try {
-      const data = {
-        full_name: formData.fullName,
-        email: formData.email,
-        phone: formData.phone,
-        cover_letter: formData.coverLetter,
-        job_id: jobId,
+      const formDataRequest = new FormData();
+
+      formDataRequest.append('full_name', formData.fullName);
+      formDataRequest.append('email', formData.email);
+      formDataRequest.append('phone', formData.phone);
+      formDataRequest.append('cover_letter', formData.coverLetter);
+      formDataRequest.append('job_id', jobId);
+
+      if(formData.resume) {
+        formDataRequest.append('resume', formData.resume);
       }
 
-      console.log(jobId)
-      console.log(formData)
-      console.log(data)
-      const response = await apiHandler("job/apply", "POST", "application/json", data)
+      const response = await apiHandler("job/apply", "POST", "multipart/form-data", formDataRequest, true)
       if (response.ok) {
         setSubmitStatus({ submitting: false, success: true, error: null });
         setFormData({

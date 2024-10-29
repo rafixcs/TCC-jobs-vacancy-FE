@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import Header from '../../components/header';
 import { AuthContext } from '../../provider/authcontext';
+import { apiHandler } from '../../utils/apihandler';
 
 const sampleUser = {
     name: 'Jane Doe',
@@ -10,15 +11,11 @@ const sampleUser = {
 
 function AccountSettings() {
   const { user } = useContext(AuthContext);
-  /*const [user, setUser] = useState({
-    name: '',
-    email: '',
-    profilePicture: '',
-  })*/
   const [profileData, setProfileData] = useState({
     name: '',
     email: '',
     profilePicture: '',
+    phone: '',
   });
   const [passwordData, setPasswordData] = useState({
     currentPassword: '',
@@ -34,6 +31,7 @@ function AccountSettings() {
         name: user.name,
         email: user.email,
         profilePicture: user.profilePicture || '',
+        phone: user.phone,
       });
       
     }    
@@ -51,21 +49,12 @@ function AccountSettings() {
 
     try {
       // Send update request to the API
-      const response = await fetch('https://api.example.com/user/profile', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(profileData),
-      });
+      const response = await apiHandler("user", "PUT", null, profileData)
 
       if (!response.ok) {
         throw new Error('Failed to update profile.');
       }
 
-      const updatedUser = await response.json();
-      setUser(updatedUser); // Update user in AuthContext
       setProfileMessage('Profile updated successfully.');
     } catch (error) {
       console.error('Error updating profile:', error);
@@ -94,17 +83,10 @@ function AccountSettings() {
 
     try {
       // Send password change request to the API
-      const response = await fetch('https://api.example.com/user/change-password', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          currentPassword: passwordData.currentPassword,
-          newPassword: passwordData.newPassword,
-        }),
-      });
+      const response = await apiHandler("user/password", "PUT", null, {
+        old_password: passwordData.currentPassword,
+        new_password: passwordData.newPassword,
+      })
 
       if (!response.ok) {
         throw new Error('Failed to change password.');
@@ -151,6 +133,17 @@ function AccountSettings() {
               type="email"
               value={profileData.email}
               onChange={(e) => setProfileData({ ...profileData, email: e.target.value })}
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+              required
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-gray-700 mb-2">Phone</label>
+            <input
+              type="phone"
+              value={profileData.phone}
+              onChange={(e) => setProfileData({ ...profileData, phone: e.target.value })}
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
               required
             />
